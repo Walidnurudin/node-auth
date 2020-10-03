@@ -1,19 +1,15 @@
 const { Router } = require('express');
-// const authController = require('../controllers/authController.js')
+const authController = require('../controllers/authController.js')
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.render('home')
-})
-router.get('/smoothies', (req, res) => {
-    res.render('smoothies')
-})
-router.get('/register', (req, res) => {
-    res.render('register')
-})
-router.get('/login', (req, res) => {
-    res.render('login')
-})
+router.get('/', authController.Home)
+router.get('/smoothies', authController.Smoothies)
+router.get('/register', authController.Register)
+router.get('/login', authController.Login)
+
+// API
+router.post('/login', authController.loginPost);
+router.post('/register', authController.registerPost);
 
 module.exports = router;
