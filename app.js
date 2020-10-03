@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 
 // connect db
 const db = 'mongodb+srv://walid:walid@cluster0.vt15h.mongodb.net/node-auth?retryWrites=true&w=majority'
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(result => app.listen(port, () => console.log(`jalan boss . . . http://localhost:${port}`)))
     .catch(err => console.log(err))
 
