@@ -4,16 +4,24 @@
     <h3>Register</h3>
     <label for="email">Email :</label>
     <input type="text" name="email" required>
+    <div class="email" style="color: red;"></div>
     <label for="Password">Password :</label>
     <input type="text" name="password" required>
+    <div class="password" style="color: red;"></div>
     <button type="submit">Register</button>
 </form>
 
 <script>
     const form = document.querySelector('form');
+    const emailErr = document.querySelector('.email')
+    const passwordErr = document.querySelector('.password')
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // reset validasi
+        emailErr.textContent = "";
+        passwordErr.textContent = "";
 
         const email = form.email.value;
         const password = form.password.value;
@@ -27,12 +35,15 @@
                 }
             })
             const data = await res.json()
-            
+
             if (data.errors) {
-                console.log("email: ", data.errors.email);
-                console.log("password: ", data.errors.password);
-            } 
-            if(data.user) {
+                // handle error belum jadi
+                // emailErr.textContent = data.errors.email.message;
+                // passwordErr.textContent = data.errors.password.message;
+
+                console.log(data)
+            }
+            if (data.user) {
                 // redirect
                 location.assign('/')
             }

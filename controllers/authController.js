@@ -1,9 +1,27 @@
 const User = require('../models/user.js')
 const jwt = require('jsonwebtoken');
 
-// token
+// handle errors
+const handleError = (err) => {
+    console.log(err);
+    let errors = { email: '', password: '' };
+
+    // incorrect email
+    if(err.message === "incorrect email!"){
+        errors.email = 'that email is not registered';
+    }
+
+    // incorrect password
+    if(err.message === 'incorrect password!'){
+        errors.password = 'that password is incorrect';
+    }
+
+    return errors;
+}
+
+// create token
 const createToken = (id) => {
-    return jwt.sign({id}, 'the ninjas');
+    return jwt.sign({ id }, 'the ninjas');
 }
 
 const Home = (req, res) => {
@@ -23,28 +41,33 @@ const Smoothies = (req, res) => {
 }
 
 const loginPost = async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     try {
         const user = await User.login(email, password);
-        res.status(200).json({user})
-    }catch(err){
-        res.status(400).json(err)
-    }
-}
-
-const registerPost = async(req, res) => {
-    const {email, password} = req.body;
-
-    try {
-        const user = await User.create({email, password});
         const token = createToken(user._id);
 
         // set cookie
-        res.cookie('jwt', token, {httpOnly: true})
-        res.status(201).json({user});
+        res.cookie('jwt', token, { httpOnly: true })
+        res.status(200).json({ user });
     } catch (err) {
-        res.status(400).send(err)
+        const errors = handleError(err);
+        res.status(400).json({errors});
+    }
+}
+
+const registerPost = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.create({ email, password });
+        const token = createToken(user._id);
+
+        // set cookie
+        res.cookie('jwt', token, { httpOnly: true })
+        res.status(200).json({ user });
+    } catch (err) {
+        res.status(400).json(err)
     }
 }
 

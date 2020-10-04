@@ -31,7 +31,7 @@ userSchema.statics.login = async function(email, password){
     const User = await this.findOne({email});
     if(User){
         // mencocokan/membandingkan password
-        const Auth = bcrypt.compare(password, User.password);
+        const Auth = await bcrypt.compare(password, User.password);
 
         if(Auth){
             return User;
