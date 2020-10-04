@@ -1,13 +1,13 @@
 const { Router } = require('express');
 const authController = require('../controllers/authController.js');
-const {requireAuth} = require('../middleware/auth');
+const { requireAuth, conRender } = require('../middleware/auth');
 
 const router = Router();
 
 router.get('/', authController.Home)
 router.get('/smoothies', requireAuth, authController.Smoothies)
-router.get('/register', authController.Register)
-router.get('/login', authController.Login)
+router.get('/register', conRender, authController.Register)
+router.get('/login', conRender, authController.Login)
 router.get('/logout', authController.Logout)
 
 // API
