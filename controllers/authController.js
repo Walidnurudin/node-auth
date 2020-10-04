@@ -1,4 +1,10 @@
 const User = require('../models/user.js')
+const jwt = require('jsonwebtoken');
+
+// token
+const createToken = (id) => {
+    return jwt.sign({id}, 'the ninjas');
+}
 
 const Home = (req, res) => {
     res.render('home')
@@ -16,11 +22,15 @@ const Smoothies = (req, res) => {
     res.render('smoothies')
 }
 
-const loginPost = (req, res) => {
+const loginPost = async (req, res) => {
     const {email, password} = req.body;
 
-    res.send('user login');
-    console.log(email, password)
+    try {
+        const user = await User.login(email, password);
+        res.status(200).json({user})
+    }catch(err){
+        res.status(400).json(err)
+    }
 }
 
 const registerPost = async(req, res) => {
@@ -28,10 +38,13 @@ const registerPost = async(req, res) => {
 
     try {
         const user = await User.create({email, password});
-        res.status(201).json(user);
+        const token = createToken(user._id);
+
+        // set cookie
+        res.cookie('jwt', token, {httpOnly: true})
+        res.status(201).json({user});
     } catch (err) {
-        console.log(err);
-        res.status(400).send('error, user not created')
+        res.status(400).send(err)
     }
 }
 
