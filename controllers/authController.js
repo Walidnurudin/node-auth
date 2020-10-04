@@ -36,6 +36,11 @@ const Login = (req, res) => {
     res.render('login')
 }
 
+const Logout = (req, res) => {
+    res.cookie("jwt", "", {maxAge: 1});
+    res.redirect("/");
+}
+
 const Smoothies = (req, res) => {
     res.render('smoothies')
 }
@@ -75,6 +80,7 @@ module.exports = {
     Home,
     Register,
     Login,
+    Logout,
     Smoothies,
     loginPost,
     registerPost
